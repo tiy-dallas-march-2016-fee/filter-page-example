@@ -1,4 +1,5 @@
-if (this.FilterPage === undefined) FilterPage = {};
+'use strict';
+if (this.FilterPage === undefined) this.FilterPage = {};
 
 (function(context) {
 
