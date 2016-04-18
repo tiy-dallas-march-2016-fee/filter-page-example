@@ -1,45 +1,51 @@
-var searchValue = document.querySelector('#search-value');
-var foodList = document.querySelector('#food-list');
+if (this.FilterPage === undefined) FilterPage = {};
 
-var food = [
-  'Tacos',
-  'Shrimp',
-  'Steak',
-  'Pizza',
-  'Tex-Mex',
-  'Po-Boy',
-  'Hamburger',
-  'French-fries',
-  'Brisket',
-  'Ribs',
-  'Pulled-pork'
-];
+(function(context) {
 
-function createFoodDOMElements(list) {
-  for (var item of list) {
-    var li = document.createElement('li');
-    li.textContent = item;
+  var searchValue = document.querySelector('#search-value');
+  var foodList = document.querySelector('#food-list');
 
-    foodList.appendChild(li);
-  }
-}
+  var state = {
+    food: [ 'Tacos', 'Shrimp', 'Steak', 'Pizza', 'Tex-Mex', 'Po-Boy', 'Hamburger', 'French-fries', 'Brisket', 'Ribs', 'Pulled-pork']
+  };
 
-createFoodDOMElements(food);
+  function createFoodDOMElements(list) {
+    for (var item of list) {
+      var li = document.createElement('li');
+      li.textContent = item;
 
-function keyHappened(evt) {
-
-  var query = searchValue.value;
-
-  var filteredFood = [];
-  for (var item of food) {
-    if (item.indexOf(query) > -1) {
-      filteredFood.push(item);
+      foodList.appendChild(li);
     }
   }
 
-  foodList.innerHTML = '';
-  createFoodDOMElements(filteredFood);
+  function filter(query, arr) {
+    var filteredFood = [];
 
-}
+    for (var item of arr) {
+      if (item.indexOf(query) > -1) {
+        filteredFood.push(item);
+      }
+    }
 
-searchValue.addEventListener('keyup', keyHappened);
+    return filteredFood;
+  }
+
+  function keyHappened(evt) {
+    var query = searchValue.value;
+    var filteredFood = filter(query, state.food);
+
+    foodList.innerHTML = '';
+    createFoodDOMElements(filteredFood);
+  }
+
+
+
+  function start() {
+    createFoodDOMElements(state.food);
+    searchValue.addEventListener('keyup', keyHappened);
+  }
+
+  context.start = start;
+  context.filter = filter;
+
+})(window.FilterPage);
